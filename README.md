@@ -7,7 +7,7 @@ Available source types:
 * VMware vCenter Server
 * [bb-ricardo/check_redfish](https://github.com/bb-Ricardo/check_redfish) inventory files
 
-**IMPORTANT: READ INSTRUCTIONS CAREFULLY BEFORE RUNNING THIS PROGRAM**
+**IMPORTANT: Đọc kỹ trước khi chạy chương trình**
 
 ## Thanks
 A BIG thank-you goes out to [Raymond Beaudoin](https://github.com/synackray) for creating
@@ -62,12 +62,12 @@ yum install python36-pip
 apt-get update && apt-get install python3-venv
 ```
 
-## Clone repo and install dependencies
-* If you need to use python 3.6 then you would need `requirements_3.6.txt` to install requirements
-* download and setup of virtual environment
+## Sao chép repo và cài đặt phụ thuộc
+* Nếu bạn cần sử dụng python 3.6 thì bạn cần có `requirements_3.6.txt` để cài đặt các yêu cầu
+* Tải xuống và thiết lập môi trường ảo
 ```shell
 cd /opt
-git clone https://github.com/bb-Ricardo/netbox-sync.git
+git clone https://github.com/huydv398/netbox-sync.git
 cd netbox-sync
 python3 -m venv .venv
 . .venv/bin/activate
@@ -76,21 +76,21 @@ pip3 install wheel || pip install wheel
 pip3 install -r requirements.txt || pip install -r requirements.txt
 ```
 
-### VMware tag sync (if necessary)
-The `vsphere-automation-sdk` must be installed if tags should be synced from vCenter to NetBox
-* assuming we are still in an activated virtual env
+### Đồng bộ hóa tag VMware (nếu cần)
+Phải cài đặt `vsphere-automation-sdk` nếu các thẻ phải được đồng bộ hóa từ vCenter sang NetBox
+* giả sử chúng ta vẫn đang ở trong một môi trường ảo được kích hoạt
 ```shell
 pip install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
 ```
 
 ## NetBox API token
-In order to updated data in NetBox you need a NetBox API token.
-* API token with all permissions (read, write) except:
+Để cập nhật dữ liệu trong NetBox, bạn cần có NetBox API token.
+* API token với tất cả các quyền (đọc, viết) ngoại trừ:
   * auth
   * secrets
   * users
 
-A short description can be found [here](https://docs.netbox.dev/en/stable/integrations/rest-api/#authentication)
+Một mô tả ngắn có thể được tìm thấy [here](https://docs.netbox.dev/en/stable/integrations/rest-api/#authentication)
 
 # Running the script
 
@@ -122,49 +122,37 @@ options:
 ```
 
 ## TESTING
-It is recommended to set log level to `DEBUG2` this way the program should tell you what is happening and why.
-Also use the dry run option `-n` at the beginning to avoid changes directly in NetBox.
+Bạn nên đặt mức nhật ký thành `DEBUG2` theo cách này, chương trình sẽ cho bạn biết điều gì đang xảy ra và tại sao. Ngoài ra, hãy sử dụng tùy chọn chạy khô -n ngay từ đầu để tránh những thay đổi trực tiếp trong NetBox.
 
+`vi settings-example.yaml`
+```
+[common]
+
+log_level = DEBUG2
+```
 ## Configuration
-There are two ways to define configuration. Any combination of config file(s) and environment variables is possible.
-* config files (the [default config](https://github.com/bb-Ricardo/netbox-sync/blob/main/settings-example.ini) file name is set to `./settings.ini`.)
+Có hai cách để xác định cấu hình. Bất kỳ sự kết hợp nào của (các) tệp cấu hình và biến môi trường đều có thể.
+* config files (the [default config](settings-example.ini) file name is set to `./settings.ini`.)
 * environment variables
 
-The config from the environment variables will have precedence over the config file definitions.
 
 ### Config files
 Following config file types are supported:
 * ini
 * yaml
-
-There is also more than one config file permitted. Example (config file names are also just examples):
-```bash
-/opt/netbox-sync/netbox-sync.py -c common.ini all-sources.yaml additional-config.yaml
-```
-
-All files are parsed in order of the definition and options will overwrite the same options if defined in a
-previous config file.
-
-To get config file examples which include descriptions and all default values, the `-g` can be used:
-```bash
-# this will create an ini example
-/opt/netbox-sync/netbox-sync.py -g -c settings-example.ini
-
-# and this will create an example config file in yaml format
-/opt/netbox-sync/netbox-sync.py -g -c settings-example.yaml 
-```
+Cấu hình từ các biến môi trường sẽ được ưu tiên hơn các định nghĩa tệp cấu hình. Trong source tôi thực hiện sửa [file](settings-example.ini)
 
 ### Environment variables
-Each setting which can be defined in a config file can also be defined using an environment variable.
+Mỗi cài đặt có thể được xác định trong tệp cấu hình cũng có thể được xác định bằng biến môi trường.
 
-The prefix for all environment variables to be used in netbox-sync is: `NBS`
+Tiền tố cho tất cả các biến môi trường được sử dụng trong netbox-sync là: `NBS`
 
-For configuration in the `common` and `netbox` section a variable is defined like this
+Đối với cấu hình trong phần `common` và `netbox`, một biến được xác định như thế này
 ```
 <PREFIX>_<SECTION_NAME>_<CONFIG_OPTION_KEY>=value
 ```
 
-Following example represents the same configuration:
+Ví dụ sau đại diện cho cùng một cấu hình:
 ```yaml
 # yaml config example
 common:
@@ -180,14 +168,14 @@ NBS_netbox_host_fqdn="netbox-host.example.com"
 NBS_NETBOX_PRUNE_ENABLED="true"
 ```
 
-This way it is possible to expose for example the `NBS_NETBOX_API_KEY` only via an env variable.
+Bằng cách này, có thể hiển thị ví dụ `NBS_NETBOX_API_KEY` chỉ thông qua một biến env.
 
-The config definitions for `sources` need to be defined using an index. Following conditions apply:
-* a single source needs to use the same index
-* the index can be number or a name (but contain any special characters to support env var parsing)
-* the source needs to be named with `_NAME` variable
+Định nghĩa cấu hình cho `sources` cần được xác định bằng index. áp dụng các điều kiện sau:
+* một sources duy nhất cần sử dụng cùng một index
+* index có thể là số hoặc tên (nhưng chứa bất kỳ ký tự đặc biệt nào để hỗ trợ phân tích cú pháp env var)
+* sources cần được đặt tên với biến _NAME
 
-Example of defining a source with config and environment variables.
+Ví dụ về xác định nguồn với các biến cấu hình và môi trường.
 ```ini
 ; example for a source
 [source/example-vcenter]
@@ -204,15 +192,92 @@ NBS_SOURCE_1_PASSWORD="super-secret-and-not-saved-to-the-config-file"
 NBS_SOURCE_1_custom_dns_servers="10.0.23.23, 10.0.42.42"
 ```
 
-Even to just define one source variable like `NBS_SOURCE_1_PASSWORD` the `NBS_SOURCE_1_NAME` needs to be defined as
-to associate to the according source definition.
+Ngay cả khi chỉ xác định một biến nguồn như `NBS_SOURCE_1_PASSWORD`, `NBS_SOURCE_1_NAME` cần được xác định là để liên kết với định nghĩa nguồn theo.
 
 ## Cron job
-In Order to sync all items regularly you can add a cron job like this one
+Để đồng bộ hóa tất cả các mục thường xuyên, bạn có thể thêm một công việc định kỳ như thế này
 ```
  # NetBox Sync
  23 */2 * * *  /opt/netbox-sync/.venv/bin/python3 /opt/netbox-sync/netbox-sync.py >/dev/null 2>&1
 ```
+
+File cấu hình cuối cùng:
+```
+egrep -v "^#|^*#|^$|^;" settings-example.ini 
+
+```
+```
+[common]
+log_level = DEBUG2
+[netbox]
+api_token = ca5558xxxxxxxxxxxxxxxxxxxxb284d7753ae5
+host_fqdn = nb.netbox-note.vn
+[source/vcenter-name]
+type = vmware
+host_fqdn = vcenter.vmware.local
+username = administrator@vsphere.local
+password = pass_vcenter
+[source/my-redfish-example]
+type = check_redfish
+inventory_file_path = check_redfish
+permitted_subnets = permitted_subnets = 172.16.0.0/12, 10.0.0.0/8, 192.168.0.0/16, 10.0.11.0/24 
+```
+# How it works
+**Đọc kỹ trước khi thực hiện**
+
+## Basic structure
+Chương trình được thực hiện như sau:
+1. Phân tích cú pháp & xác thực các cấu hình
+2. Khởi tạo tất cả các source và thiết lập kết nối với NetBox
+3. Đọc dữ liệu hiện tại từ NetBox
+4. Đọc dữ liệu từ tất cả các nguồn và thêm/cập nhật các đối tượng trong bộ nhớ
+5. Cập nhật dữ liệu trong NetBox dựa trên dữ liệu từ các sources
+6. Bỏ bớt các đối tượng đã cũ
+
+## NetBox connection
+Yêu cầu tất cả các đối tượng NetBox hiện tại. Sử dụng bộ nhớ đệm bất cứ khi nào có thể. Các đối tượng phải cung cấp thuộc tính "last_updated" để hỗ trợ bộ nhớ đệm cho loại đối tượng này.
+
+Thực sự thực hiện yêu cầu và thử lại x lần nếu hết thời gian yêu cầu. Chương trình sẽ thoát nếu tất cả các lần thử lại không thành công!
+
+## Supported sources
+Kiểm tra các tài liệu cho các nguồn khác nhau
+* [vmware](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_vmware.md)
+* [check_redfish](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_check_redfish.md)
+
+Nếu bạn có nhiều phiên bản vCenter hoặc thư mục check_redfish, chỉ cần thêm một nguồn khác có `cùng loại` vào cùng một tệp.
+
+Ví dụ:
+
+Example:
+```ini
+[source/vcenter-BLN]
+
+enabled = True
+host_fqdn = vcenter1.berlin.example.com
+
+[source/vcenter-NYC]
+
+enabled = True
+host_fqdn = vcenter2.new-york.example.com
+
+[source/redfish-hardware]
+
+type = check_redfish
+inventory_file_path = /opt/redfish_inventory
+```
+
+
+## Loại bỏ
+Bỏ bớt các đối tượng đã cũ nếu chúng không còn hiện diện trong bất kỳ nguồn nào. Đầu tiên, chúng sẽ được đánh dấu là Orphaned và sau X (tùy chọn cấu hình) ngày, chúng sẽ bị xóa khỏi NetBox.
+
+Objects subjected to pruning:
+* devices
+* VMs
+* device interfaces
+* VM interfaces
+* IP addresses
+
+Tất cả các đối tượng khác được tạo (tức là: VLANs, cluster, manufacturers) sẽ giữ thẻ nguồn nhưng sẽ không bị xóa. Luận đề là các đối tượng "được chia sẻ" có thể được sử dụng bởi các đối tượng NetBox khác nhau
 
 ## Docker
 
@@ -272,70 +337,6 @@ kubectl create secret generic netbox-sync-secrets --from-file=secrets.yaml
 kubectl apply -f k8s-netbox-sync-cronjob.yaml
  ```
 
-# How it works
-**READ CAREFULLY**
-
-## Basic structure
-The program operates mainly like this
-1. parsing and validating config
-2. instantiating all sources and setting up connection to NetBox
-3. read current data from NetBox
-4. read data from all sources and add/update objects in memory
-5. Update data in NetBox based on data from sources
-6. Prune old objects
-
-## NetBox connection
-Request all current NetBox objects. Use caching whenever possible.
-Objects must provide "last_updated" attribute to support caching for this object type.
-
-Actually perform the request and retry x times if request times out.
-Program will exit if all retries failed!
-
-## Supported sources
-Check out the documentations for the different sources
-* [vmware](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_vmware.md)
-* [check_redfish](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_check_redfish.md)
-
-If you have multiple vCenter instances or check_redfish folders just add another source with the same type
-in the **same** file.
-
-Example:
-```ini
-[source/vcenter-BLN]
-
-enabled = True
-host_fqdn = vcenter1.berlin.example.com
-
-[source/vcenter-NYC]
-
-enabled = True
-host_fqdn = vcenter2.new-york.example.com
-
-[source/redfish-hardware]
-
-type = check_redfish
-inventory_file_path = /opt/redfish_inventory
-```
-
-**Developers**:
-If you are interested in adding more source types please open an issue/discussion
-because the documentation of implementing a new source hasn't been finished yet. 🤷
-
-## Pruning
-Prune objects in NetBox if they are no longer present in any source.
-First they will be marked as Orphaned and after X (config option) days they will be
-deleted from NetBox.
-
-Objects subjected to pruning:
-* devices
-* VMs
-* device interfaces
-* VM interfaces
-* IP addresses
-
-All other objects created (i.e.: VLANs, cluster, manufacturers) will keep the
-source tag but will not be deleted. Theses are "shared" objects might be used
-by different NetBox objects
 
 # License
 >You can check out the full license [here](https://github.com/bb-Ricardo/netbox-sync/blob/main/LICENSE.txt)
