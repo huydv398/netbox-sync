@@ -1,6 +1,7 @@
 
 # NetBox-Sync
 **IMPORTANT: Đọc kỹ trước khi chạy chương trình**
+
 Tài liệu được sao chép và tham khảo [Tại đây](https://github.com/bb-Ricardo/netbox-sync/blob/main/README.md)
 ## Principles
 ## Requirements
@@ -201,6 +202,7 @@ permitted_subnets = permitted_subnets = 172.16.0.0/12, 10.0.0.0/8, 192.168.0.0/1
 ```
 # How it works
 **Đọc kỹ trước khi thực hiện**
+
 Thực hiện lệnh để chạy source:
 ```
 ./netbox-sync.py -c settings-example.ini
@@ -221,8 +223,8 @@ Thực sự thực hiện yêu cầu và thử lại x lần nếu hết thời 
 
 ## Supported sources
 Kiểm tra các tài liệu cho các nguồn khác nhau
-* [vmware](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_vmware.md)
-* [check_redfish](https://github.com/bb-Ricardo/netbox-sync/blob/main/docs/source_check_redfish.md)
+* [vmware](docs/source_vmware.md)
+* [check_redfish](docs/source_check_redfish.md)
 
 Nếu bạn có nhiều phiên bản vCenter hoặc thư mục check_redfish, chỉ cần thêm một nguồn khác có `cùng loại` vào cùng một tệp.
 
@@ -230,15 +232,15 @@ Ví dụ:
 
 Example:
 ```ini
-[source/vcenter-BLN]
+[source/vcenter-hanoi]
 
 enabled = True
-host_fqdn = vcenter1.berlin.example.com
+host_fqdn = vcenter1.hanoi.example.com
 
-[source/vcenter-NYC]
+[source/vcenter-hcm]
 
 enabled = True
-host_fqdn = vcenter2.new-york.example.com
+host_fqdn = vcenter2.hcm.example.com
 
 [source/redfish-hardware]
 
