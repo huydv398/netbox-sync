@@ -1,33 +1,8 @@
 
 # NetBox-Sync
-
-This is a tool to sync data from different sources to a NetBox instance.
-
-Available source types:
-* VMware vCenter Server
-* [bb-ricardo/check_redfish](https://github.com/bb-Ricardo/check_redfish) inventory files
-
 **IMPORTANT: Đọc kỹ trước khi chạy chương trình**
-
-## Thanks
-A BIG thank-you goes out to [Raymond Beaudoin](https://github.com/synackray) for creating
-[vcenter-netbox-sync](https://github.com/synackray/vcenter-netbox-sync) which served as source of a lot
-of ideas for this project.
-
+Tài liệu được sao chép và tham khảo [Tại đây](https://github.com/bb-Ricardo/netbox-sync/blob/main/README.md)
 ## Principles
-
-> copied from [Raymond Beaudoin](https://github.com/synackray)
-
-The [NetBox documentation](https://netbox.readthedocs.io/en/stable/#serve-as-a-source-of-truth) makes it clear
-the tool is intended to act as a "Source of Truth". The automated import of live network state is
-strongly discouraged. While this is sound logic we've aimed to provide a middle-ground
-solution for those who desire the functionality.
-
-All objects collected from vCenter have a "lifecycle". Upon import, for supported object types,
-they are tagged `NetBox-synced` to note their origin and distinguish them from other objects.
-Using this tagging system also allows for the orphaning of objects which are no longer detected in vCenter.
-This ensures stale objects are removed from NetBox keeping an accurate current state.
-
 ## Requirements
 ### Software
 * python >= 3.6
@@ -206,6 +181,8 @@ File cấu hình cuối cùng:
 egrep -v "^#|^*#|^$|^;" settings-example.ini 
 
 ```
+
+Thay các trường giá trị tương ứng với hệ thống của bạn
 ```
 [common]
 log_level = DEBUG2
@@ -224,7 +201,10 @@ permitted_subnets = permitted_subnets = 172.16.0.0/12, 10.0.0.0/8, 192.168.0.0/1
 ```
 # How it works
 **Đọc kỹ trước khi thực hiện**
-
+Thực hiện lệnh để chạy source:
+```
+./netbox-sync.py -c settings-example.ini
+```
 ## Basic structure
 Chương trình được thực hiện như sau:
 1. Phân tích cú pháp & xác thực các cấu hình
