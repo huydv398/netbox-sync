@@ -18,6 +18,7 @@ Tài liệu được sao chép và tham khảo [Tại đây](https://github.com/
 
 ### Environment
 * NetBox >= 2.9
+* NetBox đã được cài SSL
 #### Source: VMWare (if used)
 * VMWare vCenter >= 6.0
 #### Source: check_redfish (if used)
