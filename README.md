@@ -175,7 +175,8 @@ Ngay cả khi chỉ xác định một biến nguồn như `NBS_SOURCE_1_PASSWOR
 Để đồng bộ hóa tất cả các mục thường xuyên, bạn có thể thêm một công việc định kỳ như thế này
 ```
  # NetBox Sync
- 23 */2 * * *  /opt/netbox-sync/.venv/bin/python3 /opt/netbox-sync/netbox-sync.py >/dev/null 2>&1
+ 23 */2 * * *  source /opt/netbox-sync/.venv/bin/activate && /opt/netbox-sync/.venv/bin/python3 /opt/netbox-sync/netbox-sync.py -c /opt/netbox-sync/settings-example.ini
+
 ```
 
 File cấu hình cuối cùng:
