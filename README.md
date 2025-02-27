@@ -8,21 +8,20 @@ Tài liệu được sao chép và tham khảo [Tại đây](https://github.com/
 ### Software
 * python >= 3.6
 * packaging
-* urllib3==1.26.9
+* urllib3==2.2.1
 * wheel
-* requests==2.27.1
-* pyvmomi==7.0.3
-* aiodns==2.0.0
-* setuptools>=62.00.0
-* pyyaml==6.0
+* requests==2.31.0
+* pyvmomi==8.0.2.0.1
+* aiodns==3.0.0
+* pyyaml==6.0.1
 
 ### Environment
 * NetBox >= 2.9
-* NetBox đã được cài SSL
 #### Source: VMWare (if used)
 * VMWare vCenter >= 6.0
 #### Source: check_redfish (if used)
 * check_redfish >= 1.2.0
+
 
 # Installing
 * here we assume we install in ```/opt```
